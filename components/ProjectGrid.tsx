@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useRef, useState, ViewTransition } from "react";
 import Link from "next/link";
 import { AnimatePresence, LayoutGroup, motion } from "motion/react";
 import { ImageReveal } from "./ImageReveal";
@@ -95,13 +95,16 @@ export function ProjectGrid({ projects }: { projects: Project[] }) {
               <Reveal y={48} duration={1.4}>
                 <figure className="group @container">
                   <Tilt className={`relative overflow-hidden ${project.aspect}`}>
-                    <ImageReveal>
-                      <Photo
-                        slot={project.slot}
-                        sizes="(min-width: 768px) 60vw, (min-width: 640px) 50vw, 100vw"
-                        imageClassName="transition-transform duration-[2400ms] ease-calm group-hover:scale-[1.06]"
-                      />
-                    </ImageReveal>
+                    {/* Shares a name with the project page hero, so the photo grows into it. */}
+                    <ViewTransition name={`project-${project.slug}`} share="morph" default="none">
+                      <ImageReveal>
+                        <Photo
+                          slot={project.slot}
+                          sizes="(min-width: 768px) 60vw, (min-width: 640px) 50vw, 100vw"
+                          imageClassName="transition-transform duration-[2400ms] ease-calm group-hover:scale-[1.06]"
+                        />
+                      </ImageReveal>
+                    </ViewTransition>
                     <button
                       type="button"
                       onClick={(e) => open(i, e.currentTarget)}

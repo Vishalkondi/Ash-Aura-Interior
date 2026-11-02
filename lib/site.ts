@@ -551,3 +551,195 @@ export const transformations = {
 };
 
 export const transformationProjects = visibleProjects.filter((project) => project.beforeAfter);
+
+/* ----------------------------------------------------------------------------
+ * MATERIALS (home page, after "Colour & material")
+ * Each swatch is drawn in CSS (see .swatch-* in globals.css), so no photos are
+ * needed. `project` links to a project page where the material appears.
+ * ------------------------------------------------------------------------- */
+
+export type Material = { id: string; name: string; note: string; uses: string[]; project?: string };
+
+export const materials = {
+  eyebrow: "Material library",
+  heading: "what our rooms are made of",
+  intro: "A handful of materials we return to again and again. Choose one to see where it works best.",
+  items: [
+    {
+      id: "fluted-wood",
+      name: "Fluted wood",
+      note: "Vertical grooves catch light and shadow, giving a plain wall or shutter rhythm and warmth.",
+      uses: ["TV walls", "Wardrobe shutters", "Console fronts"],
+      project: "pimple-saudagar-apartment",
+    },
+    {
+      id: "brass",
+      name: "Brushed brass",
+      note: "A soft, warm metal that dulls gracefully. Used sparingly as inlays, handles and lights.",
+      uses: ["Handles & trims", "Pendant lights", "Jhoola fittings"],
+      project: "wakad-residence",
+    },
+    {
+      id: "terracotta",
+      name: "Terracotta plaster",
+      note: "Earthy, hand-applied texture that suits hand-drawn motifs and warm evening light.",
+      uses: ["Feature walls", "Arched niches", "Mandala art"],
+      project: "ravet-residence",
+    },
+    {
+      id: "sage",
+      name: "Sage lime finish",
+      note: "A muted green in a soft, chalky finish that keeps rooms calm and pairs well with oak and cream.",
+      uses: ["Sculpted walls", "Bedroom backdrops", "Upholstery accents"],
+      project: "chinchwad-apartment",
+    },
+    {
+      id: "stone",
+      name: "Warm stone",
+      note: "Travertine and stone-finish panels bring weight and quiet luxury without feeling cold.",
+      uses: ["Media walls", "Coffee tables", "Floors"],
+      project: "pimple-saudagar-apartment",
+    },
+    {
+      id: "cane",
+      name: "Cane & rattan",
+      note: "Woven natural fibre lightens joinery and lamps, and filters light beautifully.",
+      uses: ["Cabinet panels", "Pendant shades", "Seating"],
+      project: "chinchwad-apartment",
+    },
+    {
+      id: "glass",
+      name: "Coloured glass",
+      note: "Stained or tinted glass turns sunlight into colour that moves across the room through the day.",
+      uses: ["Inlays", "Partitions", "Door panels"],
+    },
+    {
+      id: "oak",
+      name: "Light oak",
+      note: "A pale, even grain that keeps compact rooms open and pairs with greige and white.",
+      uses: ["Study desks", "Shelving", "Wall cabinets"],
+      project: "moshi-family-home",
+    },
+  ] satisfies Material[],
+};
+
+/* ----------------------------------------------------------------------------
+ * ROOMS (home page tabs)
+ * `photo` is a file in /public/photos. Rooms without a photo show a tinted
+ * panel instead. `project` links to a project page.
+ * ------------------------------------------------------------------------- */
+
+export type Room = {
+  id: string;
+  label: string;
+  heading: string;
+  body: string;
+  points: string[];
+  photo?: ProjectImage;
+  project?: string;
+  tone: string;
+};
+
+export const rooms = {
+  eyebrow: "Room by room",
+  heading: "every room, considered",
+  items: [
+    {
+      id: "living",
+      label: "Living",
+      heading: "a living room for every hour",
+      body: "We plan seating around conversation and light, then layer a feature wall, soft furnishings and lighting you can dim from bright to cosy.",
+      points: ["Feature & sculpted walls", "Layered lighting", "Sofa & rug planning", "Display niches"],
+      photo: { src: "/photos/sage-living-room.jpg", alt: "Sage living room with a sculpted wall and curved sofa" },
+      project: "chinchwad-apartment",
+      tone: "#2b241d",
+    },
+    {
+      id: "media",
+      label: "TV wall",
+      heading: "media walls without the clutter",
+      body: "Concealed wiring, floating consoles and backlit shelves turn the television wall into a calm, finished piece of joinery.",
+      points: ["Concealed cabling", "Floating consoles", "Backlit shelving", "Stone & fluted panels"],
+      photo: { src: "/photos/tv-wall.jpg", alt: "Fluted wood TV wall with a backlit niche" },
+      project: "pimple-saudagar-apartment",
+      tone: "#3a2f25",
+    },
+    {
+      id: "dining",
+      label: "Dining",
+      heading: "dining that brings everyone together",
+      body: "Open living and dining plans that feel connected but distinct, with crafted pieces, pendant lights and storage close at hand.",
+      points: ["Crockery units", "Pendant lighting", "Screens & partitions", "Jhoola & statement pieces"],
+      photo: { src: "/photos/jhoola-living-dining.jpg", alt: "Living and dining room with a carved wooden jhoola" },
+      project: "wakad-residence",
+      tone: "#2e261f",
+    },
+    {
+      id: "study",
+      label: "Study",
+      heading: "a desk that fits the room",
+      body: "Built-in study corners that work for homework, work calls and guests, with storage above and lighting that is easy on the eyes.",
+      points: ["Built-in desks", "Wall cabinets", "Task lighting", "Guest-room combos"],
+      photo: { src: "/photos/study-corner.jpg", alt: "Built-in study desk with lit shelves above" },
+      project: "moshi-family-home",
+      tone: "#1f2a22",
+    },
+    {
+      id: "kitchen",
+      label: "Kitchen",
+      heading: "kitchens planned around how you cook",
+      body: "Modular kitchens laid out around your daily cooking, with tall units, easy-clean finishes and storage for every dabba and appliance.",
+      points: ["Modular layouts", "Tall & corner units", "Easy-clean finishes", "Appliance planning"],
+      tone: "#3b2a26",
+    },
+    {
+      id: "bedroom",
+      label: "Bedroom",
+      heading: "bedrooms that help you rest",
+      body: "Wardrobes sized to what you own, a soft headboard wall and warm, low light so the room winds down with you.",
+      points: ["Wardrobes & lofts", "Headboard walls", "Dressing units", "Warm, dimmable light"],
+      tone: "#24302a",
+    },
+    {
+      id: "pooja",
+      label: "Pooja",
+      heading: "a calm corner for prayer",
+      body: "Pooja units and mandirs in wood, brass and stone that sit beautifully in modern apartments, with space for lamps and flowers.",
+      points: ["Mandir units", "Jaali & carved panels", "Brass & stone details", "Bell & lamp space"],
+      tone: "#3d3024",
+    },
+    {
+      id: "office",
+      label: "Office",
+      heading: "workplaces with character",
+      body: "Offices, clinics and cafés that work hard every day while carrying a clear, memorable identity for your brand.",
+      points: ["Reception & lounges", "Workstations", "Cabins & meeting rooms", "Brand-led details"],
+      tone: "#2a2522",
+    },
+  ] satisfies Room[],
+};
+
+/* ----------------------------------------------------------------------------
+ * AREAS WE SERVE (home page map)
+ * Rough coordinates for a stylised map of PCMC and west Pune. An area with a
+ * `project` gets a filled pin that previews and links to that project.
+ * ------------------------------------------------------------------------- */
+
+export type Area = { name: string; lat: number; lng: number; project?: string };
+
+export const areas = {
+  eyebrow: "Where we work",
+  heading: "across pcmc and pune",
+  body: "Our studio is in PCMC, and we design homes and workplaces across Pimpri-Chinchwad and west Pune. Further away? Get in touch and we will talk it through.",
+  items: [
+    { name: "Moshi", lat: 18.672, lng: 73.851, project: "moshi-family-home" },
+    { name: "Ravet", lat: 18.649, lng: 73.744, project: "ravet-residence" },
+    { name: "Chinchwad", lat: 18.63, lng: 73.8, project: "chinchwad-apartment" },
+    { name: "Wakad", lat: 18.598, lng: 73.765, project: "wakad-residence" },
+    { name: "Hinjewadi", lat: 18.591, lng: 73.739 },
+    { name: "Pimple Saudagar", lat: 18.599, lng: 73.797, project: "pimple-saudagar-apartment" },
+    { name: "Pimple Nilakh", lat: 18.578, lng: 73.785 },
+    { name: "Baner", lat: 18.559, lng: 73.776 },
+    { name: "Aundh", lat: 18.558, lng: 73.808 },
+  ] satisfies Area[],
+};

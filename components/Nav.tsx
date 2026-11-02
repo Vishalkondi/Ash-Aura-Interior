@@ -99,6 +99,7 @@ export function Nav() {
             ? "border-b border-gold/15 bg-ink/90 backdrop-blur-md"
             : "border-b border-transparent bg-transparent"
         }`}
+        style={{ viewTransitionName: "site-header" }}
         animate={{ y: hidden ? "-100%" : "0%" }}
         transition={{ duration: 0.6, ease: EASE }}
         onFocusCapture={() => setTucked(false)}
