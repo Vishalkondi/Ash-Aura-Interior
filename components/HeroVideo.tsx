@@ -8,16 +8,15 @@ const MOBILE = "/videos/logo-reveal-mobile.mp4";
 const POSTER = "/videos/logo-reveal-poster.jpg";
 
 /**
- * The logo animation as the hero's centrepiece. It plays once, then holds the
- * finished logo with a slow breathing zoom while gold particles keep drifting.
- * Visitors with reduced motion or data saver, or whose browser blocks
- * autoplay, see the finished logo as a still (particles only without reduced
- * motion). Edges are masked (.hero-video in globals.css) so it melts into the page.
+ * The logo animation as the hero's centrepiece, looping continuously in the
+ * background (paused while scrolled out of view). Visitors with reduced motion
+ * or data saver, or whose browser blocks autoplay, see the finished logo as a
+ * still with gold particles (particles only without reduced motion) and a Play
+ * button. Edges are masked (.hero-video in globals.css) so it melts into the page.
  */
 export function HeroVideo() {
   const ref = useRef<HTMLVideoElement>(null);
   const [still, setStill] = useState(false);
-  const [ended, setEnded] = useState(false);
   const [calm, setCalm] = useState(false);
 
   useEffect(() => {
@@ -28,17 +27,22 @@ export function HeroVideo() {
       setStill(true);
       return;
     }
-    ref.current?.play().catch(() => setStill(true));
+    const video = ref.current;
+    if (!video) return;
+    video.play().catch(() => setStill(true));
+    // Save battery: only play while the hero is on screen.
+    const observer = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) video.play().catch(() => {});
+      else video.pause();
+    });
+    observer.observe(video);
+    return () => observer.disconnect();
   }, []);
 
   // A click is permission to play, even where autoplay was blocked or motion is reduced.
-  const replay = () => {
-    const video = ref.current;
-    if (!video) return;
+  const play = () => {
     setStill(false);
-    setEnded(false);
-    video.currentTime = 0;
-    video.play().catch(() => setStill(true));
+    ref.current?.play().catch(() => setStill(true));
   };
 
   return (
@@ -51,10 +55,10 @@ export function HeroVideo() {
           ref={ref}
           muted
           playsInline
+          loop
           preload="auto"
           onError={() => setStill(true)}
-          onEnded={() => setEnded(true)}
-          className={`absolute inset-0 h-full w-full object-cover ${ended ? "hero-video-hold" : ""}`}
+          className="absolute inset-0 h-full w-full object-cover"
         >
           <source src={MOBILE} type="video/mp4" media="(max-width: 767px)" />
           <source src={DESKTOP} type="video/mp4" />
@@ -63,22 +67,22 @@ export function HeroVideo() {
           // eslint-disable-next-line @next/next/no-img-element
           <img src={POSTER} alt="" className="hero-video-hold absolute inset-0 h-full w-full object-cover" />
         )}
-        {(ended || still) && !calm && <GoldParticles className="hero-particles absolute inset-0 h-full w-full" />}
+        {still && !calm && <GoldParticles className="hero-particles absolute inset-0 h-full w-full" />}
         <noscript>
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src={POSTER} alt="" className="absolute inset-0 h-full w-full object-cover" />
         </noscript>
       </div>
-      {(ended || still) && (
+      {still && (
         <button
           type="button"
-          onClick={replay}
+          onClick={play}
           className="hero-particles absolute bottom-[18%] right-0 inline-flex items-center gap-2 px-2 py-2 text-[0.6rem] uppercase tracking-[0.28em] text-gold/60 transition-colors duration-500 hover:text-gold sm:right-[8%] lg:right-[18%]"
         >
           <svg aria-hidden="true" viewBox="0 0 16 16" className="size-3.5 fill-none stroke-current" strokeWidth="1.3">
             <path d="M13.5 8a5.5 5.5 0 1 1-1.8-4.1M13.5 2.5v3h-3" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
-          {ended ? "Replay" : "Play intro"}
+          Play
         </button>
       )}
     </div>
