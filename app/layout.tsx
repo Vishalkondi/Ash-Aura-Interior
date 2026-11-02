@@ -75,13 +75,18 @@ const jsonLd = {
   sameAs: [contact.instagramUrl],
 };
 
+const stripExtensionAttrs = `(function(){var n=["bis_skin_checked","bis_register","bis_use"];function c(e){for(var i=0;i<n.length;i++)e.hasAttribute(n[i])&&e.removeAttribute(n[i])}var o=new MutationObserver(function(m){for(var i=0;i<m.length;i++)m[i].target.nodeType===1&&c(m[i].target)});o.observe(document.documentElement,{attributes:true,subtree:true,attributeFilter:n});addEventListener("load",function(){setTimeout(function(){o.disconnect()},2000)})})()`;
+
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en-IN" suppressHydrationWarning>
       <body suppressHydrationWarning>
+        {/* Some antivirus extensions (Bitdefender) tag every element before React loads, causing
+            hydration mismatch errors. Strip those tags until the page has loaded. */}
+        <script dangerouslySetInnerHTML={{ __html: stripExtensionAttrs }} />
         <a
           href="#main"
-          className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:bg-beige focus:px-4 focus:py-2 focus:text-ink"
+          className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-100 focus:bg-beige focus:px-4 focus:py-2 focus:text-ink"
         >
           Skip to content
         </a>

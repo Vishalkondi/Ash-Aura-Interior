@@ -60,7 +60,7 @@ export function VideoIntro() {
           role="dialog"
           aria-modal="true"
           aria-label="Ash Aura Interiors intro"
-          className="video-intro fixed inset-0 z-[80] flex cursor-pointer items-center justify-center bg-ink"
+          className="video-intro fixed inset-0 z-80 flex cursor-pointer items-center justify-center bg-ink"
           exit={{ opacity: 0, transition: { duration: 1.1, ease: EASE } }}
           onClick={() => setShow(false)}
         >

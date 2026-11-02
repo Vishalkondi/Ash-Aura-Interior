@@ -54,7 +54,7 @@ export function Cursor() {
   return (
     <motion.div
       aria-hidden="true"
-      className="pointer-events-none fixed left-0 top-0 z-[80] flex items-center justify-center rounded-full"
+      className="pointer-events-none fixed left-0 top-0 z-80 flex items-center justify-center rounded-full"
       style={{ x: sx, y: sy, translateX: "-50%", translateY: "-50%" }}
       animate={{
         width: size,

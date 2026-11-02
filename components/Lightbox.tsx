@@ -64,7 +64,7 @@ export function Lightbox({ items, index, onClose, onStep }: LightboxProps) {
       aria-modal="true"
       aria-label={`${item.title}, photo ${index + 1} of ${total}`}
       data-lenis-prevent
-      className="fixed inset-0 z-[60] flex flex-col bg-ink/96 backdrop-blur-sm"
+      className="fixed inset-0 z-60 flex flex-col bg-ink/96 backdrop-blur-sm"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
