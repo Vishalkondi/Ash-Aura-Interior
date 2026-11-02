@@ -7,40 +7,51 @@ const DESKTOP = "/videos/logo-reveal.mp4";
 const MOBILE = "/videos/logo-reveal-mobile.mp4";
 const POSTER = "/videos/logo-reveal-poster.jpg";
 
-/** Seconds before the end at which the video fades out, before restarting from the top. */
-const FADE = 0.9;
-
 /**
  * The logo animation as the hero's centrepiece, looping continuously in the
- * background with a soft fade at each restart (paused while scrolled out of view). Visitors with reduced motion
- * or data saver, or whose browser blocks autoplay, see the finished logo as a
- * still with gold particles (particles only without reduced motion) and a Play
- * button. Edges are masked (.hero-video in globals.css) so it melts into the page.
+ * background. If the browser blocks autoplay, it starts on the visitor's first
+ * tap, key press or scroll, and resumes whenever the tab comes back into view.
+ * Visitors with reduced motion or data saver see the finished logo as a still
+ * with gold particles (particles only without reduced motion) and a Play button. Edges are masked (.hero-video in globals.css) so it melts into the page.
  */
 export function HeroVideo() {
   const ref = useRef<HTMLVideoElement>(null);
   const [still, setStill] = useState(false);
   const [calm, setCalm] = useState(false);
-  const [fading, setFading] = useState(false);
 
   useEffect(() => {
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const saveData = (navigator as Navigator & { connection?: { saveData?: boolean } }).connection?.saveData;
     setCalm(reduce);
     if (reduce || saveData) {
+      // autoPlay may already have started it before this ran.
+      ref.current?.pause();
       setStill(true);
       return;
     }
     const video = ref.current;
     if (!video) return;
-    video.play().catch(() => setStill(true));
-    // Save battery: only play while the hero is on screen.
-    const observer = new IntersectionObserver(([entry]) => {
-      if (entry.isIntersecting) video.play().catch(() => {});
-      else video.pause();
-    });
-    observer.observe(video);
-    return () => observer.disconnect();
+    const start = () => {
+      video
+        .play()
+        .then(() => setStill(false))
+        .catch(() => setStill(true));
+    };
+    const events = ["pointerdown", "keydown", "touchstart", "scroll"] as const;
+    // Autoplay blocked: any interaction counts as permission, so try again then.
+    const onInteract = () => {
+      start();
+      events.forEach((e) => window.removeEventListener(e, onInteract));
+    };
+    const onVisible = () => document.visibilityState === "visible" && video.paused && start();
+
+    start();
+    events.forEach((e) => window.addEventListener(e, onInteract, { passive: true }));
+    document.addEventListener("visibilitychange", onVisible);
+    return () => {
+      events.forEach((e) => window.removeEventListener(e, onInteract));
+      document.removeEventListener("visibilitychange", onVisible);
+    };
   }, []);
 
   // A click is permission to play, even where autoplay was blocked or motion is reduced.
@@ -58,22 +69,12 @@ export function HeroVideo() {
         <video
           ref={ref}
           muted
+          loop
+          autoPlay
           playsInline
           preload="auto"
           onError={() => setStill(true)}
-          onTimeUpdate={(e) => {
-            const v = e.currentTarget;
-            if (v.duration && v.duration - v.currentTime < FADE) setFading(true);
-          }}
-          onEnded={(e) => {
-            const v = e.currentTarget;
-            v.currentTime = 0;
-            v.play().catch(() => setStill(true));
-            setFading(false);
-          }}
-          className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-700 ease-calm ${
-            fading ? "opacity-0" : "opacity-100"
-          }`}
+          className="absolute inset-0 h-full w-full object-cover"
         >
           <source src={MOBILE} type="video/mp4" media="(max-width: 767px)" />
           <source src={DESKTOP} type="video/mp4" />
