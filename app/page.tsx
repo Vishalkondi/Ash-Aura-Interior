@@ -20,14 +20,10 @@ import { FloatingWhatsApp } from "@/components/FloatingWhatsApp";
 import { Transformations } from "@/components/Transformations";
 import { CostEstimator } from "@/components/CostEstimator";
 import { JournalTeaser } from "@/components/JournalTeaser";
-import { VideoIntro, introScript } from "@/components/VideoIntro";
 
 export default function Home() {
   return (
     <>
-      {/* Runs before first paint so the intro never flashes for returning visitors. */}
-      <script dangerouslySetInnerHTML={{ __html: introScript }} />
-      <VideoIntro />
       <Nav />
       <main id="main">
         <Hero />

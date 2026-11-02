@@ -228,14 +228,16 @@ html.lenis body {
   scale: 1.15;
 }
 
-/* Full-screen logo intro (components/VideoIntro.tsx): only shown when the
-   inline script has marked this visit with <html data-intro="play">. */
-.video-intro {
-  display: none;
+/* Hero scroll cue: a short gold bar that slides down its track, on repeat. */
+.scroll-cue {
+  animation: scroll-cue 2.4s var(--ease-calm) infinite;
 }
-html[data-intro="play"] .video-intro {
-  display: flex;
+@keyframes scroll-cue {
+  from {
+    translate: 0 -100%;
+  }
+  to {
+    translate: 0 200%;
+  }
 }
-html[data-intro="play"] body {
-  overflow: hidden;
-}
+

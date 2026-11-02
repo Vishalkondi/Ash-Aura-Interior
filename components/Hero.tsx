@@ -5,6 +5,18 @@ import { Reveal } from "./Reveal";
 import { SplitText } from "./SplitText";
 import { services, site } from "@/lib/site";
 
+/** "Scroll" with a gold line running down, at the foot of the opening screen. */
+function ScrollCue() {
+  return (
+    <Reveal delay={2} y={0} className="pointer-events-none mx-auto mt-12 flex flex-col items-center gap-3 pb-2 max-sm:hidden">
+      <span className="text-[0.58rem] uppercase tracking-[0.4em] text-beige/45">Scroll</span>
+      <span aria-hidden="true" className="relative block h-12 w-px overflow-hidden bg-gold/15">
+        <span className="scroll-cue absolute inset-x-0 top-0 h-1/2 bg-gold" />
+      </span>
+    </Reveal>
+  );
+}
+
 export function Hero() {
   return (
     <section id="top" aria-label="Introduction" className="relative isolate overflow-hidden bg-ink pb-20 pt-20 md:pb-32 md:pt-24">
@@ -13,6 +25,8 @@ export function Hero() {
 
       <div className="mx-auto max-w-360 px-5 sm:px-8 lg:px-12">
         <h1 className="sr-only">Ash Aura Interiors, interior design studio in PCMC, Pune</h1>
+        {/* Opening screen: the logo video, tagline and buttons fill the first view. */}
+        <div className="relative flex min-h-[calc(100svh-5rem)] flex-col justify-center md:min-h-[calc(100svh-6rem)]">
         {/* The logo animation; its black margins are pulled in so the tagline sits close beneath. */}
         <Reveal y={0} duration={1.2} className="-mb-[clamp(1rem,7vw,5.5rem)] -mt-[clamp(0.5rem,3vw,2.5rem)]">
           <HeroVideo />
@@ -76,6 +90,9 @@ export function Hero() {
             </ul>
           </div>
         </Reveal>
+
+        <ScrollCue />
+        </div>
 
         <HeroGallery />
       </div>

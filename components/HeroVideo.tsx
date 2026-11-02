@@ -24,8 +24,7 @@ export function HeroVideo() {
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const saveData = (navigator as Navigator & { connection?: { saveData?: boolean } }).connection?.saveData;
     setCalm(reduce);
-    // The full-screen intro (VideoIntro) is playing the animation, so hold the finished logo here.
-    if (reduce || saveData || document.documentElement.dataset.intro === "play") {
+    if (reduce || saveData) {
       setStill(true);
       return;
     }
@@ -46,7 +45,7 @@ export function HeroVideo() {
     <div className="relative">
       <div
         aria-hidden="true"
-        className="hero-video relative left-1/2 aspect-video w-[135vw] max-w-[60rem] -translate-x-1/2 sm:w-[110vw]"
+        className="hero-video relative left-1/2 aspect-video w-[135vw] max-w-[60rem] -translate-x-1/2 sm:w-[110vw] lg:max-w-[min(72rem,calc((100svh-15rem)*1.5))]"
       >
         <video
           ref={ref}
