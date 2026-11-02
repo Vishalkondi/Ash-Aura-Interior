@@ -7,9 +7,12 @@ const DESKTOP = "/videos/logo-reveal.mp4";
 const MOBILE = "/videos/logo-reveal-mobile.mp4";
 const POSTER = "/videos/logo-reveal-poster.jpg";
 
+/** Seconds before the end at which the video fades out, before restarting from the top. */
+const FADE = 0.9;
+
 /**
  * The logo animation as the hero's centrepiece, looping continuously in the
- * background (paused while scrolled out of view). Visitors with reduced motion
+ * background with a soft fade at each restart (paused while scrolled out of view). Visitors with reduced motion
  * or data saver, or whose browser blocks autoplay, see the finished logo as a
  * still with gold particles (particles only without reduced motion) and a Play
  * button. Edges are masked (.hero-video in globals.css) so it melts into the page.
@@ -18,6 +21,7 @@ export function HeroVideo() {
   const ref = useRef<HTMLVideoElement>(null);
   const [still, setStill] = useState(false);
   const [calm, setCalm] = useState(false);
+  const [fading, setFading] = useState(false);
 
   useEffect(() => {
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -55,10 +59,21 @@ export function HeroVideo() {
           ref={ref}
           muted
           playsInline
-          loop
           preload="auto"
           onError={() => setStill(true)}
-          className="absolute inset-0 h-full w-full object-cover"
+          onTimeUpdate={(e) => {
+            const v = e.currentTarget;
+            if (v.duration && v.duration - v.currentTime < FADE) setFading(true);
+          }}
+          onEnded={(e) => {
+            const v = e.currentTarget;
+            v.currentTime = 0;
+            v.play().catch(() => setStill(true));
+            setFading(false);
+          }}
+          className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-700 ease-calm ${
+            fading ? "opacity-0" : "opacity-100"
+          }`}
         >
           <source src={MOBILE} type="video/mp4" media="(max-width: 767px)" />
           <source src={DESKTOP} type="video/mp4" />
